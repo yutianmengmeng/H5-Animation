@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>h5-valid</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            background-color: #eee;
+        }
+        .component{
+            width: 100%;
+            height: 50px;
+            background-color: hotpink;
+            margin:0 0 50px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="h5">
+        <div class="page section" id="page1">
+            <div class="component logo"> logo</div>
+            <div class="component slogan"> slogan</div>
+        </div>
+        <div class="page section" id="page2">
+            <div class="component title">title</div>
+            <div class="component info">info</div>
+        </div>
+        <div class="page section" id="page3">
+            <div class="component bar">bar</div>
+        </div>
+    </div>
+    <script src="../lib/jquery.js"></script>
+    <script src="../lib/jquery-ui.min.js"></script>
+    <script src="../lib/jquery.fullPage.js"></script>
+    <script>
+        $(function(){
+            $("#h5").fullpage({
+                "sectionsColor":["purple","green","blue"],
+                onLeave:function(index,nextIndex,direction){
+                    $("#h5").find(".page").eq(index-1).trigger("onleave");
+//                    console.log($(this));
+                },
+                afterLoad:function(anchorLink,index){
+                    $("#h5").find(".page").eq(index-1).trigger("onload");
+                }
+            });
+            $(".page").on("onleave", function(){
+                console.log($(this).attr("id"),"===>","leaving");
+                $(this).find(".component").trigger("onleave");
+            });
+            $(".page").on("onload",function(){
+                console.log($(this).attr("id"),"===>","loading");
+                $(this).find(".component").trigger("onload");
+            });
+            $(".component").on("onleave",function(){
+                $(this).fadeOut();
+                return false;
+            });
+            $(".component").on("onload",function(){
+                $(this).fadeIn();
+                return false;
+            });
+
+        });
+    </script>
+</body>
+</html>
